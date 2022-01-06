@@ -2,60 +2,79 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <ctype.h>
+#include <ctype.h>
 
+int weight;
+int arrlenth;
+pnode graph;
 
-//*********function for solving TSP*********//
-void TSP(pnode head){
-	
-	
-    pnode graph = head;
-    int len = -1;
-    scanf("%d", &len);
-
-    int *arr = (int *)(calloc(len, sizeof(int)));
-    for (int i = 0; i < len; i++){
+void deep_copy(int *fromArr, int *toArr, int arrLenght)
+{
+    for (int i = 0; i < arrLenght; ++i)
+    {
+        toArr[i] = fromArr[i];
+    }
+}
+void swap(int *arr, int i, int j)
+{
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+void calcPermot(int *arr, int arrLength)
+{
+    int tempWeight = 0;
+    for (int i = 0; i < arrLength - 1; ++i)
+    {
+        int distance = shortsPath_cmd(graph, arr[i], arr[i + 1]);
+        if (distance == -1)
+        {
+            tempWeight = INT_MAX;
+            return;
+        }
+        tempWeight += distance;
+    }
+    if (tempWeight < weight)
+    {
+        weight = tempWeight;
+    }
+}
+void permotion(int start, int *arr, int arrLength)
+{
+    if (start == arrLength - 1)
+    {
+        calcPermot(arr, arrLength);
+        return;
+    }
+    for (int i = start; i < arrLength; ++i)
+    {
+        int *arrCopy = (int *)(calloc(arrLength, sizeof(int)));
+        deep_copy(arr, arrCopy, arrLength);
+        swap(arrCopy, start, i);
+        permotion(start + 1, arrCopy, arrLength);
+        free(arrCopy);
+    }
+}
+void TSP_cmd(pnode head)
+{
+	weight = INT_MAX;
+	arrlenth = -1;
+    graph = head;
+    scanf("%d", &arrlenth);
+    int *arr = (int *)(calloc(arrlenth, sizeof(int)));
+    for (int i = 0; i < arrlenth; i++)
+    {
         scanf("%d", &arr[i]);
     }
-    
-    //calculates all permutations of a given nodes and
-    //on each permutation calculates all shortest paths between nodes
-    int j, i, temp;
-    int best_path, current_path;
-    int existsPath, pathFound; //flags
-    pathFound = 0;
-    best_path = INT_MAX;
-
-    for(j=1; j <= len; j++){
-
-        for(i=0; i < len-1; i++){
-
-            temp=arr[i];
-            arr[i]=arr[i+1];
-            arr[i+1]=temp;
-              
-            //one more loop that goes over all given nodes and finds shortest path between each node
-            current_path = 0;
-            existsPath = 1;
-            for(int node = 0; node<len-1;  node++){
-                int dijk = shortestPath(graph, *(arr+node), *(arr+(node+1)));
-                if (dijk == -1)
-                    existsPath = 0;
-                current_path += dijk;
-            }
-             //finds best solution
-
-            if (existsPath && (current_path < best_path)){
-                best_path = current_path;
-                pathFound = 1;
-            }
-        }
-    }
-    if(!pathFound){
-        best_path = -1;
-    }  
-
-    printf("TSP shortest path: %d \n",best_path);
-
-    //free the memory
+    int *arrCopy = (int *)(calloc(arrlenth, sizeof(int)));
+    deep_copy(arr, arrCopy, arrlenth);
+    permotion(0, arrCopy, arrlenth);
     free(arr);
+    free(arrCopy);
+    if (weight == INT_MAX)
+    {
+        weight = -1;
+    }
+    printf("TSP shortest path: %d \n", weight);
 }

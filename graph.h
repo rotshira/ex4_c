@@ -23,7 +23,7 @@ typedef struct Dijkstra {
     int weight;
     int tag;
     struct Dijkstra *next;
-} dijkstra, *p_dijkstra;
+} dijkstra, *dijkstra_P;
 
 
 void build_graph_cmd(pnode *head);
@@ -32,7 +32,8 @@ void delete_node_cmd(pnode *head);
 void printGraph_cmd(pnode head); //for self debug
 void deleteGraph_cmd(pnode* head);
 int shortsPath_cmd(pnode head, int src, int dest);
-int TSP_cmd(pnode head);
+void TSP_cmd(pnode head);
 void add_edge(pnode *head ,int i);
+
 
 #endif

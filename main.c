@@ -3,43 +3,39 @@
 #include <math.h>
 #include <limits.h>
 #include "graph.h"
+#include <ctype.h>
 
 
 int main()
 {
-char c;
-int size;
-pnode temp = NULL;
-pnode *h = &temp;
-scanf("%c" , &c);
-while(scanf("%c" , &c)!= EOF){
-if (c == 'A')
-{
-   build_graph_cmd(h);
-}
-if (c == 'B')
-{
-  insert_node_cmd(h);
-  printGraph_cmd(*h);
-}
-if (c == 'D')
-{
-  delete_node_cmd(h);
-  printGraph_cmd(*h);
-}
-if (c == 'S')
-{
-  int src = -1, dest = -1;
+    pnode temp = NULL;
+    pnode *head = &temp;
+    char input = '\0';
+    while (scanf("%c", &input) != EOF)
+    {
+        if (input == 'A')
+        {
+            build_graph_cmd(head);
+        }
+        else if (input == 'B')
+        {
+            insert_node_cmd(head);
+        }
+        else if (input == 'D')
+        {
+            delete_node_cmd(head);
+        }
+        else if (input == 'S')
+        {
+            int src = -1, dest = -1;
             scanf("%d %d", &src, &dest);
-            int dis = shortsPath_cmd(*h, src, dest);
+            int dis = shortsPath_cmd(*head, src, dest);
             printf("Dijsktra shortest path: %d \n", dis);
-            continue;
+        }
+        else if (input == 'T') {
+            TSP_cmd(*head);
+        }
+    }
+    deleteGraph_cmd(head);
+    return 0;
 }
-if (c == 'T')
-{
- TSP(*h);
-  continue;
-}
-free(h);
-}
-
