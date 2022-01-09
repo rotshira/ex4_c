@@ -6,7 +6,6 @@
 #include <ctype.h>
 
 // the main of ex4 
-
 int main()
 {
     pnode help = NULL;
@@ -33,7 +32,8 @@ int main()
             int dis = shortsPath_cmd(*head, src, dest);
             printf("Dijsktra shortest path: %d \n", dis);
         }
-        else if (c == 'T') {
+        else if (c == 'T') 
+        {
             TSP_cmd(*head);
         }
     }
